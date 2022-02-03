@@ -1,0 +1,34 @@
+name: test-snapd-stressd
+base: core20
+version: '0.2'
+summary: Provides stress-testing capabilities for testing cpu quotas # 79 char long summary
+description: |
+  This is my-snap's description. You have a paragraph or two to tell the
+  most important story about your snap. Keep it under 100 words though,
+  we live in tweetspace and your description wants to look good in the snap
+  store.
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+apps:
+  stress-sc:
+    command: usr/local/bin/stress -c 1
+    daemon: simple
+    install-mode: disable
+  stress-mp:
+    command: usr/local/bin/stress -c 2
+    daemon: simple
+    install-mode: disable
+  spawner:
+    command: usr/local/bin/spawner -n 32 -d 2
+    daemon: simple
+    install-mode: disable
+
+parts:
+  stress-src:
+    source: https://fossies.org/linux/privat/old/stress-1.0.4.tar.gz
+    plugin: autotools
+  spawner-src:
+    source: spawner
+    plugin: cmake
