@@ -11,22 +11,26 @@ confinement: devmode # use 'strict' once you have the right plugs and slots
 
 apps:
   stress-sc:
-    command: usr/local/bin/stress -c 1
+    command: usr/bin/stress -c 1
     daemon: simple
     install-mode: disable
   stress-mp:
-    command: usr/local/bin/stress -c 2
+    command: usr/bin/stress -c 2
     daemon: simple
     install-mode: disable
   spawner:
-    command: usr/local/bin/spawner -n 32 -d 2
+    command: usr/bin/spawner -n 32 -d 2
     daemon: simple
     install-mode: disable
 
 parts:
   stress-src:
-    source: https://fossies.org/linux/privat/old/stress-1.0.4.tar.gz
     plugin: autotools
+    source: https://fossies.org/linux/privat/old/stress-1.0.4.tar.gz
+    configflags:
+      - --prefix=/usr
   spawner-src:
-    source: spawner
     plugin: cmake
+    source: spawner
+    configflags:
+      - -DCMAKE_INSTALL_PREFIX=/usr
