@@ -89,7 +89,7 @@ int main(int argc, char** argv)
         }
 
         // sleep for delay
-        thrd_sleep(&(struct timespec){.tv_sec=delay}, NULL);
+        sleep(delay);
     }
 
     return 0;
