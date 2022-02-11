@@ -4,4 +4,7 @@ project(spawn-stressd C)
 add_executable(spawner main.c)
 target_link_libraries(spawner pthread)
 
-install(TARGETS spawner)
+install(
+  TARGETS spawner 
+  RUNTIME DESTINATION bin
+)
