@@ -14,14 +14,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <threads.h>
+#include <pthread.h>
+#include <unistd.h>
 
 struct worker_context {
-    thrd_t     id;
+    pthread_t  id;
     atomic_int enabled;
 };
 
-int worker_main(void* arg)
+void* worker_main(void* arg)
 {
     struct worker_context* context = (struct worker_context*)arg;
     atomic_store(&context->enabled, 1);
@@ -29,7 +30,7 @@ int worker_main(void* arg)
     printf("worker_main: %li started\n", context->id);
 
     while(atomic_load(&context->enabled)) {
-        thrd_sleep(&(struct timespec){.tv_sec=1}, NULL);
+        sleep(1);
     }
 
     printf("worker_main: %li stopped\n", context->id);
@@ -80,8 +81,8 @@ int main(int argc, char** argv)
                 continue;
             }
             
-            status = thrd_create(&contexts[i].id, worker_main, &contexts[i]);
-            if (status != thrd_success) {
+            status = pthread_create(&contexts[i].id, NULL, worker_main, &contexts[i]);
+            if (status) {
                 printf("spawner: reached worker thread limit %i\n", i);
                 break;
             }
