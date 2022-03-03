@@ -1,6 +1,6 @@
 name: test-snapd-stressd
 base: core18
-version: '0.2'
+version: '0.3'
 summary: Provides stress-testing capabilities for testing cpu quotas # 79 char long summary
 description: |
   Snap used for testing different quota related functionality. Provides a few
@@ -22,6 +22,10 @@ apps:
     command: usr/bin/spawner -n 32 -d 2
     daemon: simple
     install-mode: disable
+  logger:
+    command: usr/bin/logger -c 5 -i 5
+    daemon: simple
+    install-mode: disable
 
 parts:
   stress-src:
@@ -34,3 +38,9 @@ parts:
     source: spawner
     configflags:
       - -DCMAKE_INSTALL_PREFIX=/usr
+  logger-src:
+    plugin: cmake
+    source: logger
+    configflags:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+    build-packages: [libsystemd-dev]
